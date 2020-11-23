@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assets>
+  <data/>
+  <data/>
+  <data>0.0</data>
+  <data>2</data>
+  <data>en</data>
+  <setting id="fps">25</setting>
+  <setting id="traillength">15</setting>
+  <setting id="width">540</setting>
+  <setting id="borderThickness">15</setting>
+  <setting id="borderAngle">45</setting>
+  <setting id="borderDistance">0</setting>
+  <setting id="borderBlur">0</setting>
+  <setting id="backgroundColor">#333333</setting>
+  <setting id="backgroundOpacity">0</setting>
+  <setting id="sticksMode">2</setting>
+  <setting id="sticksModeVertPos">75</setting>
+  <setting id="stickColor">#FF6666</setting>
+  <setting id="simultaneousRenderers">1</setting>
+</assets>
