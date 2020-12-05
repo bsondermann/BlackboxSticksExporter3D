@@ -14,12 +14,10 @@ for x in range(len(settings)):
 bpy.context.scene.render.resolution_x = int(settings[1])
 bpy.context.scene.render.resolution_y = int(settings[1])/3
 
-bpy.data.scenes["Scene"].node_tree.nodes["Math.001"].inputs[1].default_value = int(settings[2])/255.0
-bpy.data.scenes["Scene"].node_tree.nodes["Math"].inputs[1].default_value = int(settings[3])/255.0
-bpy.data.scenes["Scene"].node_tree.nodes["Math.002"].inputs[1].default_value = int(settings[4])/255.0
+
 bpy.context.scene.render.fps = 1000
-bpy.context.scene.render.fps_base =1000/float(settings[5])
-bpy.data.scenes["Scene"].node_tree.nodes["Image"].frame_duration = int(settings[6])
+bpy.context.scene.render.fps_base =1000/float(settings[2])
+bpy.data.scenes["Scene"].node_tree.nodes["Image"].frame_duration = int(settings[3])
 
 
 csvfile = open(bpy.path.abspath("//../csv/"+settings[0]),'r')

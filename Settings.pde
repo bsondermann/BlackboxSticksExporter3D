@@ -7,14 +7,7 @@ class Settings{
     lang.getTranslation("descFPS"),
 lang.getTranslation("descTraillength"),
 lang.getTranslation("descWidth"),
-lang.getTranslation("descBorderThickness"),
-lang.getTranslation("descBorderAngle"),
-lang.getTranslation("descBorderDistance"),
-lang.getTranslation("descBorderBlur"),
-lang.getTranslation("descBackgroundColor"),
-lang.getTranslation("descBackgroundOpacity"),
 lang.getTranslation("descSticksMode"),
-lang.getTranslation("descSticksModeVertPos"),
 lang.getTranslation("descStickColor"),
 lang.getTranslation("descSimultaneousRenderers")
 };

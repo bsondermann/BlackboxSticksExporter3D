@@ -102,7 +102,7 @@ File file;
 
     for (float j = 0; j< space*taillength; j++) {
       RamTableRow trailrow = table.getRow(constrain(int(i-j), 0, table.getRowCount()-1));
-      alphaG.fill(255, 255, 255, map(j, 0, space*taillength, 100, 0));
+      alphaG.fill(sticksColor[0],sticksColor[1], sticksColor[2], map(j, 0, space*taillength, 100, 0));
       float r = map(j, 0, space*taillength, ((w/3)/7.3f)/1.5f, ((w/3)/7.3f)/10);
       float x=0, y=0, x1=0, y1=0;
       
@@ -192,15 +192,8 @@ File file;
     fps=Float.parseFloat(settings[0]);
     tailLength=Integer.parseInt(settings[1]);
     vidWidth=Integer.parseInt(settings[2]);
-    borderThickness=map(Integer.parseInt(settings[3]),0,100,0,(vidWidth/75.0f));
-    borderAngle=Integer.parseInt(settings[4]);
-    borderDistance=(int)map(Integer.parseInt(settings[5]),0,100,0,vidWidth/40);
-    borderBlur=Integer.parseInt(settings[6]);
-    bgOpacity=Integer.parseInt(settings[8]);
-    sticksMode=Integer.parseInt(settings[9]);
-    sticksModeVertPos=Integer.parseInt(settings[10]);
-    bgColor = color(Integer.parseInt(settings[7].substring(1, 3), 16), Integer.parseInt(settings[7].substring(3, 5), 16), Integer.parseInt(settings[7].substring(5, 7), 16));
-    sticksColor = new int[]{Integer.parseInt(settings[11].substring(1, 3), 16), Integer.parseInt(settings[11].substring(3, 5), 16), Integer.parseInt(settings[11].substring(5, 7), 16)};
+    sticksMode=Integer.parseInt(settings[3]);
+    sticksColor = new int[]{Integer.parseInt(settings[4].substring(1, 3), 16), Integer.parseInt(settings[4].substring(3, 5), 16), Integer.parseInt(settings[4].substring(5, 7), 16)};
     
   }
   void prepBlender(int sublog){
@@ -217,11 +210,8 @@ File file;
     String[] blenderSettings = new String[7];
     blenderSettings[0]=file.getName();
     blenderSettings[1]=vidWidth+"";
-    blenderSettings[2]=sticksColor[0]+"";
-    blenderSettings[3]=sticksColor[1]+"";
-    blenderSettings[4]=sticksColor[2]+"";
-    blenderSettings[5]=fps+"";
-    blenderSettings[6]=parseInt(numFrames)+"";
+    blenderSettings[2]=fps+"";
+    blenderSettings[3]=parseInt(numFrames)+"";
     saveStrings(sketchPath()+"/temp/"+number+"/"+sublog+"/settings.txt",blenderSettings);
     ProcessBuilder processBuilder= new ProcessBuilder(sketchPath()+"/assets/blender2.90.1/blender.exe" ,sketchPath()+"/temp/"+number+"/"+sublog+"/template.blend","--python",sketchPath()+"/temp/"+number+"/"+sublog+"/script.py","-b");
 
@@ -273,8 +263,9 @@ File file;
           starttime=millis();
           file = logs[i];
           ie = new ImageExporter();
-          
+          if(tailLength>0){
           renderLog(i);
+          }
           while(ie.queue.size()>0){
           try{Thread.sleep(10);}catch(Exception e){}}
           ie.done=true;

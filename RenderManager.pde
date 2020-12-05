@@ -9,7 +9,7 @@ class RenderManager extends Thread{
   Selection s;
   RenderManager(File[] f,String[]set,Selection s){
     this.s=s;
-    simultRenderNum=Integer.parseInt(set[12]);
+    simultRenderNum=Integer.parseInt(set[5]);
     renderSettings=set;
     filterFiles(f);
     initRenderers();

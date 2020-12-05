@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-  <setting id="Fps" type="num,1.0">29.97</setting>
-  <setting id="Traillength" type="num">15</setting>
+  <setting id="Fps" type="num,1.0">25</setting>
+  <setting id="Traillength" type="num">25</setting>
   <setting id="Width" type="num">540</setting>
-  <setting id="BorderThickness" type="num,0,100">15</setting>
-  <setting id="BorderAngle" type="num,0,360">45</setting>
-  <setting id="BorderDistance" type="num,0,100">0</setting>
-  <setting id="BorderBlur" type="num,0,100">0</setting>
-  <setting id="BackgroundColor" type="col">#333333</setting>
-  <setting id="BackgroundOpacity" type="num,0,100">0</setting>
   <setting id="SticksMode" type="num,1,4">2</setting>
-  <setting id="SticksModeVertPos" type="num,0,100">75</setting>
-  <setting id="StickColor" type="col">#FFF874</setting>
+  <setting id="StickColor" type="col">#FF6666</setting>
   <setting id="SimultaneousRenderers" type="num">1</setting>
 </settings>
