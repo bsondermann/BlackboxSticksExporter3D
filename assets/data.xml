@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assets>
-  <data/>
-  <data/>
-  <data>0.1</data>
-  <data>2</data>
+  <data></data>
+  <data>0.3</data>
+  <data></data>
   <data>en</data>
   <setting id="fps">25</setting>
   <setting id="traillength">15</setting>

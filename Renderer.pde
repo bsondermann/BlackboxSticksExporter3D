@@ -83,7 +83,8 @@ File file;
     println(h);
     RamTable table = new RamTable(file.getAbsolutePath());
     if(table.getRowCount()<=2){return;}
-    PGraphics alphaG=createGraphics(vidWidth,int(vidWidth*(1.0f/3)));
+    PGraphics tailL=createGraphics(int(vidWidth*(1.0f/3)),int(vidWidth*(1.0f/3)));
+    PGraphics tailR=createGraphics(int(vidWidth*(1.0f/3)),int(vidWidth*(1.0f/3)));
     int startindex=1;
     float lengthus=(PApplet.parseFloat(table.getRow(table.getRowCount()-1).getString(1).trim())-PApplet.parseFloat(table.getRow(startindex).getString(1).trim()));
     int lengthlist = table.getRowCount()-startindex;
@@ -95,14 +96,19 @@ File file;
     RamTableRow row = table.getRow(int(i));
     currentFrame++;
 
-    alphaG.beginDraw();
-    alphaG.clear();
-    alphaG.noStroke();
+    tailL.beginDraw();
+    tailL.clear();
+    tailL.noStroke();
+    tailR.beginDraw();
+    tailR.clear();
+    tailR.noStroke();
     float taillength=(fps/30)*tailLength;
 
     for (float j = 0; j< space*taillength; j++) {
       RamTableRow trailrow = table.getRow(constrain(int(i-j), 0, table.getRowCount()-1));
-      alphaG.fill(sticksColor[0],sticksColor[1], sticksColor[2], map(j, 0, space*taillength, 100, 0));
+      //alphaG.fill(sticksColor[0],sticksColor[1], sticksColor[2], map(j, 0, space*taillength, 100, 0));
+      tailL.fill(255);
+      tailR.fill(255);
       float r = map(j, 0, space*taillength, ((w/3)/7.3f)/1.5f, ((w/3)/7.3f)/10);
       float x=0, y=0, x1=0, y1=0;
       
@@ -114,39 +120,45 @@ File file;
     
     
     if(betaflight){
-      valthrottletrail=-map(int(trailrow.getString(colthrottle).trim()), 1000, 2000, -0.436f, 0.436f);
-      valpitchtrail = map(-int(trailrow.getString(colpitch).trim()), -500, 500, -0.436f, 0.436f);
-      valyawtrail=map(int(trailrow.getString(colyaw).trim()),-500,500,0.436f,-0.436f);
-      valrolltrail=map(int(trailrow.getString(colroll).trim()),-500,500,-0.436f,0.436f);
+      valthrottletrail=-map(int(trailrow.getString(colthrottle).trim()), 1000, 2000, -1, 1);
+      valpitchtrail = map(-int(trailrow.getString(colpitch).trim()), -500, 500, -1, 1);
+      valyawtrail=map(int(trailrow.getString(colyaw).trim()),-500,500,1,-1);
+      valrolltrail=map(int(trailrow.getString(colroll).trim()),-500,500,-1,1);
     }
       
       if (sticksMode==2) {
         //yaw
-        x =h/2+sin(valyawtrail)*150+1;
+        x =h/2+valyawtrail*int(vidWidth*(1.0f/6))*0.4+1;
         //throttle
-        y = h/2+sin(valthrottletrail)*150;
+        y = h/2+valthrottletrail*int(vidWidth*(1.0f/6))*0.4;
         //roll
-        x1= w-h/2+sin(valrolltrail)*150-2;
+        x1= h/2+valrolltrail*int(vidWidth*(1.0f/6))*0.4-2;
         //pitch
-        y1 = h/2+sin(valpitchtrail)*150;
+        y1 = h/2+valpitchtrail*int(vidWidth*(1.0f/6))*0.4;
       }
-        alphaG.ellipse(x, y, r, r);
+        tailL.ellipse(x, y, r, r);
 
-        alphaG.ellipse(x1, y1, r, r);
+        tailR.ellipse(x1, y1, r, r);
 
       trailrow=null;
     }
-    alphaG.endDraw();
+    tailL.endDraw();
+    tailR.endDraw();
     
-    PGraphics out = createGraphics(alphaG.width, alphaG.height, JAVA2D);
-    out.beginDraw();
-    out.clear();
-    out.image(alphaG,0,0);
+    PGraphics outL = createGraphics(tailL.width, tailL.height, JAVA2D);
+    outL.beginDraw();
+    outL.clear();
+    outL.image(tailL,0,0);
+    outL.endDraw();
+    PGraphics outR = createGraphics(tailR.width, tailR.height, JAVA2D);
+    outR.beginDraw();
+    outR.clear();
+    outR.image(tailR,0,0);
+    outR.endDraw();
 
-    out.endDraw();
-    
-    ie.addImage(out,"temp/"+number+"/"+sublog+"/Images/in_"+("0000000000"+where).substring((where+"").length())+".png");
-    prevImage = out;
+    ie.addImage(outL,"temp/"+number+"/"+sublog+"/Images/L/in_"+("0000000000"+where).substring((where+"").length())+".png");
+    ie.addImage(outR,"temp/"+number+"/"+sublog+"/Images/R/in_"+("0000000000"+where).substring((where+"").length())+".png");
+    prevImage = outL;
     where++;
     row = null;
   }
@@ -210,8 +222,11 @@ File file;
     String[] blenderSettings = new String[7];
     blenderSettings[0]=file.getName();
     blenderSettings[1]=vidWidth+"";
-    blenderSettings[2]=fps+"";
-    blenderSettings[3]=parseInt(numFrames)+"";
+    blenderSettings[2]=""+sticksColor[0];
+    blenderSettings[3]=""+sticksColor[1];
+    blenderSettings[4]=""+sticksColor[2];
+    
+    blenderSettings[5]=fps+"";
     saveStrings(sketchPath()+"/temp/"+number+"/"+sublog+"/settings.txt",blenderSettings);
     ProcessBuilder processBuilder= new ProcessBuilder(sketchPath()+"/assets/blender2.90.1/blender.exe" ,sketchPath()+"/temp/"+number+"/"+sublog+"/template.blend","--python",sketchPath()+"/temp/"+number+"/"+sublog+"/script.py","-b");
 

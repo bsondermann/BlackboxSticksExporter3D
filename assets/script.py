@@ -2,6 +2,7 @@ import bpy
 import csv
 import math
 
+
 GimbalL = bpy.data.objects["GimbalL"]
 StickL = bpy.data.objects["StickL"]
 GimbalR = bpy.data.objects["GimbalR"]
@@ -14,10 +15,14 @@ for x in range(len(settings)):
 bpy.context.scene.render.resolution_x = int(settings[1])
 bpy.context.scene.render.resolution_y = int(settings[1])/3
 
+bpy.data.materials["Material.003"].node_tree.nodes["Combine RGB"].inputs[0].default_value = int(settings[2])/255
+bpy.data.materials["Material.003"].node_tree.nodes["Combine RGB"].inputs[1].default_value = int(settings[3])/255
+bpy.data.materials["Material.003"].node_tree.nodes["Combine RGB"].inputs[2].default_value = int(settings[4])/255
+
+
 
 bpy.context.scene.render.fps = 1000
-bpy.context.scene.render.fps_base =1000/float(settings[2])
-bpy.data.scenes["Scene"].node_tree.nodes["Image"].frame_duration = int(settings[3])
+bpy.context.scene.render.fps_base =1000/float(settings[5])
 
 
 csvfile = open(bpy.path.abspath("//../csv/"+settings[0]),'r')
@@ -52,5 +57,4 @@ for x in range(int(numframes)):
     GimbalR.rotation_euler=[0,0,0]
     GimbalR.rotation_euler.rotate_axis("X",map(float(csvFileArray[int(x*space)][14]),-500,500,0.436,-0.436))
     GimbalR.keyframe_insert(data_path="rotation_euler", index=-1)
-
 bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)

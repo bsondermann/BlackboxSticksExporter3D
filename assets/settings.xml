@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-  <setting id="Fps" type="num,1.0">25</setting>
-  <setting id="Traillength" type="num">25</setting>
+  <setting id="Fps" type="num,1.0">29.97</setting>
+  <setting id="Traillength" type="num">29</setting>
   <setting id="Width" type="num">540</setting>
   <setting id="SticksMode" type="num,1,4">2</setting>
   <setting id="StickColor" type="col">#FF6666</setting>

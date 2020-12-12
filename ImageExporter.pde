@@ -15,6 +15,7 @@ class ImageExporter extends Thread{
           for(int i = 0; i< queue.size();i++){
               queue.get(i).start();
               queue.remove(i);
+              i--;
           }
           
         Thread.sleep(10);
