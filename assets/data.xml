@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assets>
-  <data></data>
-  <data></data>
+  <data/>
+  <data/>
   <data>0.4</data>
   <data></data>
   <data>en</data>
@@ -10,5 +10,7 @@
   <setting id="width">540</setting>
   <setting id="sticksMode">2</setting>
   <setting id="stickColor">#FF6666</setting>
+  <setting id="stickcoveropacity">100</setting>
+  <setting id="stickdistance">100</setting>
   <setting id="simultaneousRenderers">1</setting>
 </assets>
