@@ -154,8 +154,8 @@ PrintStream stderr=System.err;
             for(int i = 0; i< inputFiles.size();i++){
               files[i] = inputFiles.get(i);
             }
-            
             rm = new RenderManager(files,getCurrentSettings(),this);
+            
           }
           rendering = true;
           p = new Preview(200,rm);

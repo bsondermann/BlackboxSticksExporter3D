@@ -10,7 +10,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStreamReader; 
 import drop.*;
+String[]fileFormats={".bbl",".BBL",".bfl",".BFL",".txt",".TXT"};
 Selection s;
+boolean filesLoaded=false;
 File inputPath,outputPath;
 LinkedList<File> inputFiles = new LinkedList<File>();
 int inputFilesNum=0;
@@ -28,10 +30,8 @@ void setup(){
   surface.setIcon(icon);
   drop = new SDrop(this);
   data = loadXML(sketchPath()+"/assets/data.xml");
-  if(data.getChildren("data")[0].getContent()!=""){
-    inputPath=new File(data.getChildren("data")[0].getContent());
-    inputFilesNum=getNumFiles(inputPath);
-  }
+  
+  
   if(data.getChildren("data")[1].getContent()!=""){
     outputPath=new File(data.getChildren("data")[1].getContent());
   }if(data.getChildren("data")[2].getContent()!=""){
@@ -54,6 +54,9 @@ void setup(){
   if(!newVersion){
     s=new Selection(this);
   }
+  if(data.getChildren("data")[0].getContent()!=""){
+    inputPath=new File(data.getChildren("data")[0].getContent());
+  }
   thread("clearTemp");
   frameRate(30);
 }
@@ -63,6 +66,7 @@ void draw(){
   if(!newVersion){
     s.show();
     if(s.active()){
+
     if(inputPath!=null){
       String text=inputPath.getAbsolutePath()+" | "+inputFilesNum+" "+lang.getTranslation("infoNumLogsFound");
       textAlign(CENTER,BOTTOM);
@@ -96,6 +100,11 @@ void draw(){
     text(lang.getTranslation("newVersionAlert"),width/2,height/2);
     
   }
+    if(data.getChildren("data")[0].getContent()!=""&&filesLoaded==false&&frameCount>1){
+    inputPath=new File(data.getChildren("data")[0].getContent());
+    inputFilesNum=getNumFiles(inputPath);
+    filesLoaded=true;
+  }
 }
 
 void actionPerformed(GUIEvent e){
@@ -120,15 +129,13 @@ int getNumFiles(File path){
   int num=0;
   File[] files = path.listFiles();
   for(int i = 0; i<files.length; i++){
-    if(files[i].getName().contains(".BFL")||files[i].getName().contains(".bbl")){
-      num++;
-    }else if(files[i].getName().contains(".TXT")){
-      String []s = loadStrings(files[i]);
-      if(s.length>0){
+    if(files[i].isFile()&&checkFormat(files[i])){
+    String []s = loadStrings(files[i]);
+    if(s.length>0){
+
         if(s[0].equals("H Product:Blackbox flight data recorder by Nicholas Sherlock")){
           num++;
-        }
-      }
+      }}
     }
   }
   return num;
@@ -158,7 +165,7 @@ void mouseDragged(){
 void mousePressed(){
   if(newVersion){
     try{
-    Desktop.getDesktop().browse(new URL("https://www.github.com/bsondermann/BlackboxSticksExporter/releases/").toURI());
+    Desktop.getDesktop().browse(new URL("https://www.github.com/bsondermann/BlackboxSticksExporter3D/releases/").toURI());
     }catch(Exception e){e.printStackTrace();}
   }
 if(s!=null){
@@ -181,12 +188,12 @@ void exit(){
   
 }
 boolean checkUpdates(){
-  /*GetRequest get = new GetRequest("https://api.github.com/repos/bsondermann/BlackboxSticksExporter/releases/latest");
+  GetRequest get = new GetRequest("https://api.github.com/repos/bsondermann/BlackboxSticksExporter3D/releases/latest");
   get.send();
   
   if(Float.parseFloat(parseJSONObject(get.getContent()).getString("tag_name").trim().substring(1))>version){return true;}
   else{return false;}
-*/return false;}
+}
 void shutdown(){
   try{
   Runtime r = Runtime.getRuntime();
@@ -205,7 +212,11 @@ void dropEvent(DropEvent e){
       data.getChildren("data")[0].setContent(f.getAbsolutePath());
       saveXML(data,"assets/data.xml");
     }else{
-      if(f.getAbsolutePath().contains(".BFL")||f.getAbsolutePath().contains(".bbl")||f.getAbsolutePath().contains(".TXT")){
+      if(checkFormat(f)){
+       String []s = loadStrings(f);
+          if(s.length>0){
+            if(s[0].equals("H Product:Blackbox flight data recorder by Nicholas Sherlock")){
+      
         boolean contains = false;
         for(File fi : inputFiles){
           if(fi.getAbsolutePath().equals(f.getAbsolutePath())){
@@ -213,18 +224,17 @@ void dropEvent(DropEvent e){
           }
         }
         if(!contains){
-          String []s = loadStrings(f);
-          if(s.length>0){
-            if(s[0].equals("H Product:Blackbox flight data recorder by Nicholas Sherlock")){
+          
               inputFiles.add(f);
               println(loadStrings(f)[0]);
               inputPath=null;
-            }
+            
           }
         }
       }
     }
   }
+}
 }
 void savePreset(File f){
   if(s!=null){
@@ -235,4 +245,10 @@ void loadPreset(File f){
   if(s!=null){
     s.loadPreset(f);
   }
+}
+boolean checkFormat(File f){
+  for(int i = 0; i< fileFormats.length; i++){
+    if(f.getName().contains(fileFormats[i])){return true;}
+  }
+  return false;
 }

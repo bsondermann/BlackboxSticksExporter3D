@@ -13,22 +13,20 @@ File file;
   int[]sticksColor;
   PImage prevImage;
   int starttime=0;
-  boolean betaflight=true;
+  int colthrottle=16;
+    int colpitch = 14;
+    int colyaw=15;
+    int colroll=13;
   ImageExporter ie;
   Renderer(File f,String[]s,int number){
     currentState="Idle";
     this.number= number;
+
     settings = s;
     file = f;
-    String []temp = loadStrings(f);
-    println(temp[22]);
-      if(temp.length>0){
-        if(temp[22].contains("INAV")){
-          betaflight = false;
-        }
-      }
+
     parseSettings();
-    
+
   }
   void convertLog(){
     
@@ -64,24 +62,19 @@ File file;
   void renderLog(int sublog){
     if(stop){return;}
     
-    int colthrottle=16;
-    int colpitch = 14;
-    int colyaw=15;
-    int colroll=13;
-    if(!betaflight){
-      colroll=22;
-      colpitch=23;
-      colyaw=24;
-      colthrottle=25;
-    }
-    
-    
     
     currentState=lang.getTranslation("rendererStateRendering");
     int w = vidWidth;
     int h = int(w*(1.0f/3));
     println(h);
     RamTable table = new RamTable(file.getAbsolutePath());
+    for(int i = 0; i< table.getRow(0).content.length; i++){
+      if(table.getRow(0).getString(i).contains("rcCommand[0]")){colroll=i;}
+      if(table.getRow(0).getString(i).contains("rcCommand[1]")){colpitch=i;}
+      if(table.getRow(0).getString(i).contains("rcCommand[2]")){colyaw=i;}
+      if(table.getRow(0).getString(i).contains("rcCommand[3]")){colthrottle=i;}
+    }
+
     if(table.getRowCount()<=2){return;}
     PGraphics tailL=createGraphics(int(vidWidth*(1.0f/3)),int(vidWidth*(1.0f/3)));
     PGraphics tailR=createGraphics(int(vidWidth*(1.0f/3)),int(vidWidth*(1.0f/3)));
@@ -104,12 +97,12 @@ File file;
     tailR.noStroke();
     float taillength=(fps/30)*tailLength;
 
-    for (float j = 0; j< space*taillength; j++) {
+    for (float j = space*taillength-1; j>0; j--) {
       RamTableRow trailrow = table.getRow(constrain(int(i-j), 0, table.getRowCount()-1));
       //alphaG.fill(sticksColor[0],sticksColor[1], sticksColor[2], map(j, 0, space*taillength, 100, 0));
-      tailL.fill(255);
-      tailR.fill(255);
-      float r = map(j, 0, space*taillength, ((w/3)/7.3f)/1.5f, ((w/3)/7.3f)/10);
+      tailL.fill(map(j, 0, space*taillength, 255,120));
+      tailR.fill(map(j, 0, space*taillength, 255,120));
+      float r = ((w/3)/7.3f)/3;//map(j, 0, space*taillength, ((w/3)/7.3f)/1.5f, ((w/3)/7.3f)/10);
       float x=0, y=0, x1=0, y1=0;
       
       
@@ -119,12 +112,12 @@ File file;
       float valyawtrail=0;
     
     
-    if(betaflight){
-      valthrottletrail=-map(int(trailrow.getString(colthrottle).trim()), 1000, 2000, -1, 1);
-      valpitchtrail = map(-int(trailrow.getString(colpitch).trim()), -500, 500, -1, 1);
-      valyawtrail=map(int(trailrow.getString(colyaw).trim()),-500,500,1,-1);
-      valrolltrail=map(int(trailrow.getString(colroll).trim()),-500,500,-1,1);
-    }
+
+        valthrottletrail=-map(int(trailrow.getString(colthrottle).trim()), 1000, 2000, -1, 1);
+        valpitchtrail = map(-int(trailrow.getString(colpitch).trim()), -500, 500, -1, 1);
+        valyawtrail=map(int(trailrow.getString(colyaw).trim()),-500,500,1,-1);
+        valrolltrail=map(int(trailrow.getString(colroll).trim()),-500,500,-1,1);
+      
       
       if (sticksMode==2) {
         //yaw
@@ -219,14 +212,20 @@ File file;
     newDir = Paths.get(sketchPath()+"/temp/"+number+"/"+sublog);
     Files.copy(source, newDir.resolve(source.getFileName()));
 
-    String[] blenderSettings = new String[7];
+    String[] blenderSettings = new String[12];
     blenderSettings[0]=file.getName();
     blenderSettings[1]=vidWidth+"";
     blenderSettings[2]=""+sticksColor[0];
     blenderSettings[3]=""+sticksColor[1];
     blenderSettings[4]=""+sticksColor[2];
-    
     blenderSettings[5]=fps+"";
+    blenderSettings[6]=settings[6]+"";
+    blenderSettings[7]=settings[5]+"";
+    blenderSettings[8]=colthrottle+"";
+    blenderSettings[9]=colyaw+"";
+    blenderSettings[10]=colpitch+"";
+    blenderSettings[11]=colroll+"";
+    
     saveStrings(sketchPath()+"/temp/"+number+"/"+sublog+"/settings.txt",blenderSettings);
     ProcessBuilder processBuilder= new ProcessBuilder(sketchPath()+"/assets/blender2.90.1/blender.exe" ,sketchPath()+"/temp/"+number+"/"+sublog+"/template.blend","--python",sketchPath()+"/temp/"+number+"/"+sublog+"/script.py","-b");
 

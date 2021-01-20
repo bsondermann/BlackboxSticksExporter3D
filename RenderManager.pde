@@ -9,7 +9,7 @@ class RenderManager extends Thread{
   Selection s;
   RenderManager(File[] f,String[]set,Selection s){
     this.s=s;
-    simultRenderNum=Integer.parseInt(set[5]);
+    simultRenderNum=Integer.parseInt(set[7]);
     renderSettings=set;
     filterFiles(f);
     initRenderers();
@@ -53,26 +53,20 @@ class RenderManager extends Thread{
   void filterFiles(File[]f){
     int filenum =0;
     for(int i = 0; i< f.length;i++){
-      if(f[i].getName().contains(".BFL")||f[i].getName().contains(".bbl")){
-        filenum++;
-      }
-      else if(f[i].getName().contains(".TXT")){
+      if(checkFormat(f[i])){
       String []s = loadStrings(f[i]);
       if(s.length>0){
         if(s[0].equals("H Product:Blackbox flight data recorder by Nicholas Sherlock")){
           filenum++;
         }
+      
       }
-      }
+    }
     }
     files= new File[filenum];
     int index=0;
     for(int i = 0; i< f.length;i++){
-      if(f[i].getName().contains(".BFL")||f[i].getName().contains(".bbl")){
-        files[index]=f[i];
-        index++;
-      }
-      else if(f[i].getName().contains(".TXT")){
+      if(checkFormat(f[i])){
       String []s = loadStrings(f[i]);
       if(s.length>0){
         if(s[0].equals("H Product:Blackbox flight data recorder by Nicholas Sherlock")){

@@ -9,6 +9,8 @@ lang.getTranslation("descTraillength"),
 lang.getTranslation("descWidth"),
 lang.getTranslation("descSticksMode"),
 lang.getTranslation("descStickColor"),
+"StickCover opacity sets the opacity of the round cover over the gimbal. Values: 0 to 100",
+"Stick distance sets the distance between the sticks. Values: 0 to 100",
 lang.getTranslation("descSimultaneousRenderers")
 };
   IFLabel labels[];

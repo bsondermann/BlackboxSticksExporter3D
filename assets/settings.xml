@@ -4,6 +4,8 @@
   <setting id="Traillength" type="num">29</setting>
   <setting id="Width" type="num">540</setting>
   <setting id="SticksMode" type="num,1,4">2</setting>
-  <setting id="StickColor" type="col">#FF6666</setting>
-  <setting id="SimultaneousRenderers" type="num">1</setting>
+  <setting id="StickColor" type="col">#FFFF00</setting>
+  <setting id="StickCoverOpacity" type="num,0,100">100</setting>
+  <setting id="StickDistance" type="num,0,100">50</setting>
+  <setting id="SimultaneousRenderers" type="num">4</setting>
 </settings>

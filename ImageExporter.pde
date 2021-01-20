@@ -11,14 +11,12 @@ class ImageExporter extends Thread{
   void run(){
     while(!done){
       try{
-        
-          for(int i = 0; i< queue.size();i++){
-              queue.get(i).start();
-              queue.remove(i);
-              i--;
+
+          if(queue.size()>0){
+          queue.getFirst().start();
+          queue.removeFirst();
           }
-          
-        Thread.sleep(10);
+        Thread.sleep(1);
       }catch(Exception e){
       e.printStackTrace();
     }
